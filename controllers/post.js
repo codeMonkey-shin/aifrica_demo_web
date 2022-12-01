@@ -7,7 +7,7 @@ const StatusCodes = require("http-status-codes");
 
 module.exports = {
     postImage: asyncWrapper(async (req, res, next) => {  // 이미지를 등록함
-        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file.location === undefined || req.body.userOrganization ===null) {
+        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file.location === undefined || req.body.userOrganization ===undefined) {
             throw new CustomError(
                 "올바르지 않은 파라미터 값입니다.",
                 StatusCodes.CONFLICT

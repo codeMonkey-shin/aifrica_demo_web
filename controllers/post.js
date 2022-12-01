@@ -7,21 +7,22 @@ const StatusCodes = require("http-status-codes");
 
 module.exports = {
     postImage: asyncWrapper(async (req, res, next) => {  // 이미지를 등록함
-        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file.location === undefined) {
+        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file.location === undefined || req.body.userOrganization ===null) {
             throw new CustomError(
                 "올바르지 않은 파라미터 값입니다.",
                 StatusCodes.CONFLICT
             );
         }
         const imageUrl = req.file.location;
-        const {userName,userEmail,userPhone,prompt,translatedPrompt} = req.body;
+        const {userName,userEmail,userPhone,prompt,translatedPrompt,userOrganization} = req.body;
         await Post.create({
             userName:userName,
             userEmail: userEmail,
             userPhone: userPhone,
             prompt: prompt,
             translatedPrompt: translatedPrompt,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            userOrganization: userOrganization
         })
         res.status(StatusCodes.OK).send({message: "등록이 완료되었습니다."});
     }),

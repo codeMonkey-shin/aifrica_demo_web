@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             imageUrl: {
                 type: DataTypes.STRING(100),
-                allowNull: true,
+                allowNull: false,
             },
             userName: {
                 type: DataTypes.STRING(30),
@@ -49,7 +49,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             userPhone: {
                 type: DataTypes.STRING(30),
-                allowNull: true,
+                allowNull: false,
+            },
+            userOrganization: {
+                type: DataTypes.STRING(30),
+                allowNull: false,
             },
         },
         {

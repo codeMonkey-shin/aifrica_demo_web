@@ -7,7 +7,7 @@ const StatusCodes = require("http-status-codes");
 
 module.exports = {
     postImage: asyncWrapper(async (req, res, next) => {  // 이미지를 등록함
-        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file.location === undefined || req.body.userOrganization ===undefined) {
+        if (req.body.userName === undefined || req.body.userEmail === undefined || req.body.userPhone === undefined || req.body.prompt === undefined || req.body.translatedPrompt === undefined || req.file === undefined || req.body.userOrganization ===undefined) {
             throw new CustomError(
                 "올바르지 않은 파라미터 값입니다.",
                 StatusCodes.CONFLICT
@@ -53,6 +53,12 @@ module.exports = {
         const result = await Post.findOne({
             where:{id:id}
         });
+        if (!result) {
+            throw new CustomError(
+                `id ${req.query.id} 가 존재하지 않습니다.`,
+                StatusCodes.BAD_REQUEST
+            );
+        }
         await result.update({isApproved:true})
         res.status(StatusCodes.OK).send({message: "이미지 승인이 완료되었습니다."});
     }),
@@ -83,6 +89,12 @@ module.exports = {
         const result = await Post.findOne({
             where:{id:id}
         });
+        if (!result) {
+            throw new CustomError(
+                `id ${req.query.id} 가 존재하지 않습니다.`,
+                StatusCodes.BAD_REQUEST
+            );
+        }
         await result.increment("hit");
         res.status(StatusCodes.OK).json({
             status:"success",
@@ -102,7 +114,7 @@ module.exports = {
         });
         if (!result) {
             throw new CustomError(
-                `글번호 ${req.query.id} 가 존재하지 않습니다.`,
+                `id ${req.query.id} 가 존재하지 않습니다.`,
                 StatusCodes.BAD_REQUEST
             );
         }
@@ -139,6 +151,7 @@ module.exports = {
             );
         }
         const id = req.query.id;
+
         await Post.destroy({
             where:{id:id}
         });

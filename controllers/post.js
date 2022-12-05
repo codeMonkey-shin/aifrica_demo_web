@@ -100,6 +100,13 @@ module.exports = {
         const result = await Post.findOne({
             where:{id:id}
         });
+        if (!result) {
+            throw new CustomError(
+                `글번호 ${req.query.id} 가 존재하지 않습니다.`,
+                StatusCodes.BAD_REQUEST
+            );
+        }
+
         if(result.isLike===true){
             await result.update({isLike:false})
             res.status(StatusCodes.OK).send({message: "좋아요 취소가 완료되었습니다."});

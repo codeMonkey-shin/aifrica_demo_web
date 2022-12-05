@@ -4,6 +4,7 @@ const cors = require("cors");
 const models = require("./models/index.js");
 const watermarkRoutes = require("./routes/watermark");
 const postRoutes = require("./routes/post");
+const errorHandler = require("./errors/error-handler");
 const app = express();
 const PORT = process.env.PORT;
 
@@ -26,6 +27,10 @@ app.use(bodyParser.urlencoded({ limit : "3mb",extended: true }));
 //라우터 설정
 app.use("/watermark", watermarkRoutes);
 app.use("/post", postRoutes);
+
+
+//무조건 에러설정은 라우팅 설정 밑에넣는다
+app.use(errorHandler);
 
 // 데이터베이스 연동
 models.sequelize

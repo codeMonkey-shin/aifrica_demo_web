@@ -7,7 +7,7 @@ const {
     getImage,
     getNotApprovedImages,
     getImages,
-    getLikedImages
+    getLikedImages, getExcelFile
 } = require("../controllers/post")
 const {uploadPost} = require("../middleWare/multer");
 router.post("/", uploadPost, postImage);
@@ -18,4 +18,8 @@ router.get("/",  getImages);
 router.get("/detail",  getImage);
 router.get("/disapproval",  getNotApprovedImages);
 router.get("/like",  getLikedImages);
+router.get("/excel",  getExcelFile);
+
+
+
 module.exports = router;

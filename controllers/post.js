@@ -1,4 +1,4 @@
-const {Post} = require("../models");
+const {Post,GpuServer} = require("../models");
 const {asyncWrapper} = require("../errors/async");
 const {pagingSize, paging} = require("../config/pagingConfig");
 const CustomError = require("../errors/custom-error");
@@ -21,6 +21,7 @@ module.exports = {
             userEmail: userEmail,
             userPhone: userPhone,
             prompt: prompt,
+            isApproved: true,
             translatedPrompt: translatedPrompt,
             imageUrl: imageUrl,
             userOrganization: userOrganization
@@ -157,6 +158,22 @@ module.exports = {
             where: {id: id}
         });
         res.status(StatusCodes.OK).send({message: "삭제가 완료되었습니다."})
+    }),
+    getRunCount: asyncWrapper(async (req, res, next) => { // 이미지생성 카운트를 가져옴
+        const server = await GpuServer.findOne({
+            where: {id:1}
+        })
+        res.status(StatusCodes.OK).json({
+            status: "success",
+            count: server.count
+        });
+    }),
+    addRunCount: asyncWrapper(async (req, res, next) => { // 이미지생성 카운트를 추가함
+        const server = await GpuServer.findOne({
+            where: {id:1}
+        })
+        await server.increment("count");
+        res.status(StatusCodes.OK).send({message: "success"})
     }),
     getExcelFile: asyncWrapper(async (req, res, next) => { // 데이터베이스 엑셀형식으로 다운로드
 

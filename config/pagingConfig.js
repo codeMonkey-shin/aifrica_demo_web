@@ -1,5 +1,5 @@
 module.exports = {
-    pagingSize: 10,
+    pagingSize: 12,
     paging(pageNum,pagingSize) {
         if (pageNum === undefined || pageNum === 1) {
             return 0

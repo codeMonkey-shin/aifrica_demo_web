@@ -16,7 +16,7 @@ module.exports = {
         }
         const imageUrl = req.file.location;
         const {userName, userEmail, userPhone, prompt, translatedPrompt, userOrganization} = req.body;
-        await Post.create({
+        const result = await Post.create({
             userName: userName,
             userEmail: userEmail,
             userPhone: userPhone,
@@ -26,7 +26,7 @@ module.exports = {
             imageUrl: imageUrl,
             userOrganization: userOrganization
         })
-        res.status(StatusCodes.OK).send({message: "등록이 완료되었습니다."});
+        res.status(StatusCodes.OK).json({status: "success", data: result});
     }),
     getNotApprovedImages: asyncWrapper(async (req, res, next) => {  // 승인되지 않은 이미지들을 가져옴
         const page = req.query.page;
@@ -208,5 +208,40 @@ module.exports = {
                 res.end()
             });
     }),
+    getGritalkCount: asyncWrapper(async (req, res, next) => { // 그리톡 카운트
+        const server = await GpuServer.findOne({
+            where: {id:2}
+        })
+        res.status(StatusCodes.OK).json({
+            status: "success",
+            count: server.count
+        });
+    }),
+    addGritalkCount: asyncWrapper(async (req, res, next) => { // 이미지생성 카운트를 추가함
+        const server = await GpuServer.findOne({
+            where: {id:2}
+        })
+        await server.increment("count");
+        res.status(StatusCodes.OK).json({
+            message: "success",
+            count: server.count
+        });
+    }),
+    updatePost: asyncWrapper(async (req, res, next) => {
+        console.log(req.body);
+        var server = await Post.findOne({
+            where: {id:req.body.id}
+        })
+        server = await server.update({
+            userName: req.body.userName,
+            userEmail: req.body.userEmail,
+            userPhone: req.body.userPhone,
+            prompt: req.body.prompt,
+            isApproved: true,
+            translatedPrompt: req.body.translatedPrompt,
+            userOrganization: req.body.userOrganization
+        })
+        res.status(StatusCodes.OK).json({status: "success", data: server});
 
+    }),
 }
